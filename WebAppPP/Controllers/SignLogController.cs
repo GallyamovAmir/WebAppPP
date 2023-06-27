@@ -41,13 +41,6 @@ namespace WebAppPP.Controllers
                 return Unauthorized("Недостаточно прав");
             }
 
-            var cookieOptions = new CookieOptions
-            {
-                Expires = DateTime.Now.AddDays(1), // Срок действия cookie - 7 дней
-                HttpOnly = true // Cookie доступен только для HTTP запросов
-            };
-            Response.Cookies.Append("user", phone, cookieOptions);
-
             var claims = new List<Claim> { new Claim(ClaimTypes.Name, user.Phone) };
             // создаем объект ClaimsIdentity
             ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, "Cookies");
