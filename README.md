@@ -4,5 +4,6 @@ Internship. Technologies such as:
 2) EF Core 7
 3) Cookies
 4) Asynchronous programming (async await)
+5) JQuery
 
 Were implemented: Authorization through cookies, CRUD for working with the database
