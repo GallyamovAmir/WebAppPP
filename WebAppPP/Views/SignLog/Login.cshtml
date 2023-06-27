@@ -13,14 +13,14 @@
                     <form method='post'>
                         <div class="form-group">
                             <label for="phone">Phone</label>
-                            <input type="tel" name="phone" class="form-control" id="phone" pattern="[0-9+]{12}" required />
+                            <input type="tel" name="phone" class="form-control" id="phone" pattern="[0-9+]{12}" required maxlength="12" />
                         </div>
                         <div class="form-group">
                             <label for="password">Password</label>
                             <div class="input-group">
-                                <input type="password" name="password" class="form-control" id="password" />
+                                <input type="password" name="password" class="form-control" id="password" required maxlength="8" />
                                 <div class="input-group-append">
-                                    <button class="btn btn-outline-secondary" type="button" id="toggle-password">
+                                    <button class="btn btn-outline-secondary" type="button" id="toggle-password" >
                                         <i class="fa fa-eye"></i>
                                     </button>
                                 </div>
