@@ -16,16 +16,21 @@ namespace WebAppPP.Controllers
             _logger = logger;
         }
 
+        public IActionResult Login()
+        {
+            return View();
+        }
+
         [HttpPost]
-        public async Task<IActionResult> Log(string returnUrl)
+        public async Task<IActionResult> Log(string phone, string password)
         {
             var form = Request.Form;
             // если phone и/или пароль не установлены, посылаем статусный код ошибки 400
             if (!form.ContainsKey("phone") || !form.ContainsKey("password"))
                 return BadRequest("Phone и/или пароль не установлены");
 
-            string phone = form["phone"];
-            string password = form["password"];
+             phone = form["phone"];
+             password = form["password"];
 
             VarkaDbContext db = new VarkaDbContext();
             // находим пользователя 
@@ -36,12 +41,19 @@ namespace WebAppPP.Controllers
                 return Unauthorized("Недостаточно прав");
             }
 
+            var cookieOptions = new CookieOptions
+            {
+                Expires = DateTime.Now.AddDays(1), // Срок действия cookie - 7 дней
+                HttpOnly = true // Cookie доступен только для HTTP запросов
+            };
+            Response.Cookies.Append("user", phone, cookieOptions);
+
             var claims = new List<Claim> { new Claim(ClaimTypes.Name, user.Phone) };
             // создаем объект ClaimsIdentity
             ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, "Cookies");
             // установка аутентификационных куки
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
-            return RedirectToAction(returnUrl ?? "Index");
+            return RedirectToAction("Index", "Home");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

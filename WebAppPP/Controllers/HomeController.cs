@@ -17,6 +17,9 @@ namespace WebAppPP.Controllers
 
         public IActionResult Index()
         {
+            var username = Request.Cookies["user"];
+
+            ViewBag.Username = username;
             return View();
         }
 
