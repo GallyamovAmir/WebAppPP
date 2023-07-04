@@ -36,7 +36,9 @@ namespace WebAppPP.Controllers
         [Authorize]
         public async Task<IActionResult> Logout()
         {
+            ILogger logger = LoggerFactory.Create(builder => builder.AddConsole()).CreateLogger("Login");
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            logger.LogCritical($"{DateTime.Now}: User clicked 'Log out'");
             return RedirectToAction("Login", "SignLog");
         }
 

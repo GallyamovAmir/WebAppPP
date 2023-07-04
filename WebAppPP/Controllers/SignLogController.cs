@@ -22,8 +22,10 @@ namespace WebAppPP.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Log(string phone, string password)
         {
+            ILogger logger = LoggerFactory.Create(builder => builder.AddConsole()).CreateLogger("Login");
             var form = Request.Form;
             // если phone и/или пароль не установлены, посылаем статусный код ошибки 400
             if (!form.ContainsKey("phone") || !form.ContainsKey("password"))
@@ -46,7 +48,11 @@ namespace WebAppPP.Controllers
             ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, "Cookies");
             // установка аутентификационных куки
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+
+            logger.LogInformation($"{DateTime.Now}: User with phone: {phone} and password: {password} has been authorized");
             return RedirectToAction("Index", "Home");
+
+           
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
